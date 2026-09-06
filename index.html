@@ -313,7 +313,7 @@
       grid-template-rows: repeat(9, 1fr);
       gap: 1px;
       background: var(--board-border);
-      border: 3px solid #231208;
+      border: 4px solid #b88344;
       border-radius: 6px;
       overflow: hidden;
       aspect-ratio: 1 / 1;
@@ -353,15 +353,15 @@
       opacity: 1;
     }
 
-    /* 3x3 Block Thicker Borders */
+    /* 3x3 Block Thicker & Brighter Golden-Wood Borders */
     .cell:nth-child(3n) {
-      border-right: 2px solid #1a0b04;
+      border-right: 3.5px solid #c79354;
     }
     .cell:nth-child(9n) {
       border-right: none;
     }
     .cell-row-2, .cell-row-5 {
-      border-bottom: 2px solid #1a0b04;
+      border-bottom: 3.5px solid #c79354;
     }
 
     /* Cell State classes */
@@ -798,7 +798,7 @@
           <span id="note-mode-text">候補入力: OFF</span>
         </button>
         <button class="tool-btn" id="btn-erase">
-          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 19 17.59 13.41 12z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
           <span>消去</span>
         </button>
         <button class="tool-btn" id="btn-hint">
@@ -1068,10 +1068,6 @@
       }
 
       static generate(difficulty) {
-        // Clue counts for different difficulties:
-        // 並 (Normal): 38 clues
-        // 難 (Hard): 29 clues
-        // 最高レベル (Expert): 22 clues (Extremely challenging!)
         let targetClues = 38;
         if (difficulty === 'hard') targetClues = 29;
         if (difficulty === 'expert') targetClues = 22;
