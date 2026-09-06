@@ -22,8 +22,10 @@
       --cell-hover: #754827;
       --cell-selected: #945d31;
       --cell-related: rgba(212, 163, 89, 0.18);
-      --cell-same-num: rgba(212, 175, 55, 0.35);
-      --cell-note-highlight: rgba(72, 187, 120, 0.35);
+      
+      /* Unified Green Palette for Same Number & Candidate Matches */
+      --cell-same-num: rgba(72, 187, 120, 0.38);
+      --cell-note-highlight: rgba(72, 187, 120, 0.22);
       --cell-error: rgba(217, 68, 68, 0.45);
       
       --text-given: #f4e8c1;
@@ -391,29 +393,35 @@
       background: var(--cell-related);
     }
 
+    /* Unified Green Highlight for Placed Same Number */
     .cell.highlight-same {
-      background: var(--cell-same-num);
+      background: var(--cell-same-num) !important;
+      outline: 2px solid rgba(72, 187, 120, 0.7);
+      outline-offset: -2px;
+      box-shadow: inset 0 0 10px rgba(72, 187, 120, 0.4);
+      z-index: 1;
     }
 
+    /* Unified Green Highlight for Candidate Note Matches */
     .cell.highlight-note-match {
       background: var(--cell-note-highlight) !important;
-      outline: 2px dashed rgba(72, 187, 120, 0.8);
+      outline: 2px dashed rgba(104, 211, 145, 0.85);
       outline-offset: -2px;
       z-index: 1;
     }
 
     .cell.selected {
       background: var(--cell-selected) !important;
-      outline: 2px solid var(--gold-primary);
+      outline: 2.5px solid var(--gold-primary) !important;
       outline-offset: -2px;
-      z-index: 2;
-      box-shadow: inset 0 0 10px rgba(212, 175, 55, 0.6), 0 0 8px rgba(212, 175, 55, 0.5);
+      z-index: 3;
+      box-shadow: inset 0 0 12px rgba(212, 175, 55, 0.7), 0 0 10px rgba(212, 175, 55, 0.6);
     }
 
     /* Selected Cell in Note Mode */
     .board-wrapper.note-mode-active .cell.selected {
-      outline: 2px dashed #63b3ed !important;
-      box-shadow: inset 0 0 10px rgba(99, 179, 237, 0.6), 0 0 10px rgba(99, 179, 237, 0.6) !important;
+      outline: 2.5px dashed #63b3ed !important;
+      box-shadow: inset 0 0 12px rgba(99, 179, 237, 0.7), 0 0 10px rgba(99, 179, 237, 0.6) !important;
     }
 
     /* Pencil Marks (Candidate Notes Grid) */
@@ -442,8 +450,8 @@
     .note-num.highlight-digit {
       color: #68d391;
       font-weight: 800;
-      transform: scale(1.3);
-      text-shadow: 0 0 5px rgba(104, 211, 145, 0.8);
+      transform: scale(1.35);
+      text-shadow: 0 0 6px rgba(104, 211, 145, 0.9);
     }
 
     /* Controls Keypad Area */
@@ -798,7 +806,7 @@
           <span id="note-mode-text">候補入力: OFF</span>
         </button>
         <button class="tool-btn" id="btn-erase">
-          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 19 17.59 13.41 12z"/></svg>
           <span>消去</span>
         </button>
         <button class="tool-btn" id="btn-hint">
@@ -1694,9 +1702,9 @@
           this.startNewGame();
         });
 
+        // Exit on Victory modal: Simply close modal without alert!
         document.getElementById('btn-modal-exit').addEventListener('click', () => {
           this.victoryModal.classList.remove('active');
-          alert('本日のナンプレプレイお疲れ様でした！またいつでも挑戦してください。');
         });
 
         // Window leave warning (beforeunload)
