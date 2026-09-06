@@ -798,7 +798,7 @@
           <span id="note-mode-text">候補入力: OFF</span>
         </button>
         <button class="tool-btn" id="btn-erase">
-          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 19 17.59 13.41 12z"/></svg>
           <span>消去</span>
         </button>
         <button class="tool-btn" id="btn-hint">
@@ -1068,9 +1068,13 @@
       }
 
       static generate(difficulty) {
-        let targetClues = 40;
-        if (difficulty === 'hard') targetClues = 32;
-        if (difficulty === 'expert') targetClues = 26;
+        // Clue counts for different difficulties:
+        // 並 (Normal): 38 clues
+        // 難 (Hard): 29 clues
+        // 最高レベル (Expert): 22 clues (Extremely challenging!)
+        let targetClues = 38;
+        if (difficulty === 'hard') targetClues = 29;
+        if (difficulty === 'expert') targetClues = 22;
 
         const solution = this.createGrid();
         this.solve(solution);
@@ -1269,26 +1273,28 @@
         const selValue = (selR >= 0 && selC >= 0) ? this.userBoard[selR][selC] : 0;
         const selBoxR = Math.floor(selR / 3);
         const selBoxC = Math.floor(selC / 3);
-        const activeFilter = this.filterDigit;
+        
+        // Target digit for note matching: either active filter digit OR the digit of selected cell!
+        const highlightTargetDigit = this.filterDigit > 0 ? this.filterDigit : selValue;
 
         for (let r = 0; r < 9; r++) {
           for (let c = 0; c < 9; c++) {
             const cell = this.cells[r][c];
             cell.classList.remove('selected', 'highlight-related', 'highlight-same', 'highlight-note-match');
 
-            // Highlight notes inside cells for active filter
+            // Highlight notes inside cells for highlightTargetDigit
             const notesGrid = cell.querySelector('.notes-grid');
             for (let n = 1; n <= 9; n++) {
               const noteSpan = notesGrid.querySelector(`.note-${n}`);
-              if (activeFilter > 0 && n === activeFilter && this.notes[r][c].has(n)) {
+              if (highlightTargetDigit > 0 && n === highlightTargetDigit && this.notes[r][c].has(n)) {
                 noteSpan.classList.add('highlight-digit');
               } else {
                 noteSpan.classList.remove('highlight-digit');
               }
             }
 
-            // Cell Note Match Highlight
-            if (activeFilter > 0 && this.userBoard[r][c] === 0 && this.notes[r][c].has(activeFilter)) {
+            // Cell Note Match Highlight (Empty cell containing candidate note matching highlightTargetDigit)
+            if (highlightTargetDigit > 0 && this.userBoard[r][c] === 0 && this.notes[r][c].has(highlightTargetDigit)) {
               cell.classList.add('highlight-note-match');
             }
 
@@ -1398,10 +1404,12 @@
         const prevVal = this.userBoard[r][c];
         if (prevVal === num) return;
 
+        // Backup existing candidates before placing digit so they can be restored if incorrect!
+        const prevNotes = new Set(this.notes[r][c]);
+
         this.clearErrorTimer(r, c);
         this.pushHistory();
         this.userBoard[r][c] = num;
-        this.notes[r][c].clear();
 
         // Check correctness
         if (num !== 0 && num !== this.solution[r][c]) {
@@ -1413,17 +1421,20 @@
             this.warningBanner.style.display = 'block';
           }
 
-          // Auto-erase incorrect digit after 3 seconds
+          // Auto-erase incorrect digit after 3 seconds AND restore previous candidate notes!
           const key = `${r}_${c}`;
           this.errorTimers[key] = setTimeout(() => {
             if (this.userBoard[r][c] === num && num !== this.solution[r][c]) {
               this.userBoard[r][c] = 0;
+              this.notes[r][c] = prevNotes; // Restore candidates!
               delete this.errorTimers[key];
               this.renderBoard();
             }
           }, 3000);
 
         } else if (num !== 0 && num === this.solution[r][c]) {
+          // Correct digit -> Clear candidates for this cell and clean up row/col/box
+          this.notes[r][c].clear();
           this.sounds.playTap();
           this.cleanUpCandidates(r, c, num);
         }
