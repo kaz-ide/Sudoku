@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>木目調 数独 (Wood-grain Sudoku)</title>
+  <title>数独 (Wood-grain Sudoku)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Noto+Serif+JP:wght@500;700;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
@@ -284,16 +284,17 @@
       background: linear-gradient(180deg, #2b6cb0 0%, #1a365d 100%);
       border: 1px solid #63b3ed;
       color: #ebf8ff;
-      font-size: 0.76rem;
+      font-size: 0.72rem;
       font-weight: 700;
-      padding: 2px 14px;
+      padding: 2px 10px;
       border-radius: 12px;
+      white-space: nowrap;
       box-shadow: 0 3px 8px rgba(0,0,0,0.6), 0 0 10px rgba(99, 179, 237, 0.5);
       display: none;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       z-index: 10;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
       animation: badgeGlow 1.5s infinite alternate;
     }
 
@@ -734,7 +735,7 @@
     <!-- Header -->
     <header>
       <div class="title-area">
-        <h1>木目調 数独</h1>
+        <h1>数独</h1>
       </div>
       <div class="stats-bar">
         <div class="stat-item">
@@ -783,7 +784,7 @@
 
     <!-- Sudoku Board Frame with Floating Mode Badge -->
     <div class="board-wrapper" id="board-wrapper">
-      <div class="board-mode-badge">✎ 候補（メモ）入力モード中</div>
+      <div class="board-mode-badge">✎ 候補入力モード</div>
       <div class="sudoku-board" id="board">
         <!-- 81 Cells rendered by JavaScript -->
       </div>
@@ -1125,7 +1126,7 @@
         this.mistakes = 0;
         this.streakInvalidated = false;
         this.isGameActive = false;
-        this.hasMadeMoves = false; // Tracks if user has made any inputs in current game
+        this.hasMadeMoves = false;
 
         this.currentStreak = parseInt(localStorage.getItem('sudoku_current_streak') || '0', 10);
         this.maxStreak = parseInt(localStorage.getItem('sudoku_max_streak') || '0', 10);
@@ -1250,9 +1251,6 @@
         this.updateHighlights();
       }
 
-      /**
-       * Check if digit 1-9 is fully completed on the board (all 9 instances placed correctly)
-       */
       isDigitCompleted(num) {
         let count = 0;
         for (let r = 0; r < 9; r++) {
@@ -1346,7 +1344,7 @@
           }
         }
 
-        // Update numpad completed status (all 9 instances placed)
+        // Update numpad completed status
         document.querySelectorAll('.num-btn').forEach(btn => {
           const num = parseInt(btn.dataset.num, 10);
           if (this.isDigitCompleted(num)) {
@@ -1360,7 +1358,7 @@
       }
 
       handleNumberInput(num) {
-        // If digit is already completed (placed 9 times correctly), block input without mistake penalty!
+        // Block completed digits without penalty
         if (this.isDigitCompleted(num)) {
           this.sounds.playBlocked();
           return;
@@ -1372,7 +1370,7 @@
 
         if (this.initialBoard[r][c] !== 0) return;
 
-        this.hasMadeMoves = true; // Mark user activity
+        this.hasMadeMoves = true;
 
         if (this.isNoteMode) {
           this.toggleNote(r, c, num);
@@ -1669,7 +1667,6 @@
         });
 
         document.getElementById('btn-exit').addEventListener('click', () => {
-          // If no moves made, exit/restart without prompt or streak penalty!
           if (!this.hasMadeMoves) {
             this.startNewGame();
           } else {
