@@ -440,15 +440,16 @@
       align-items: center;
       justify-content: center;
       font-family: 'Outfit', sans-serif;
-      font-size: 0.70rem;
+      font-size: 0.85rem;
       font-weight: 600;
       color: var(--text-note);
       opacity: 0.9;
       transition: color 0.15s ease, transform 0.15s ease;
       
-      /* ★以下を追加：縦を80〜85%に圧縮して横のはみ出しを防ぐ */
-      transform: scaleX(0.85);
-      transform-origin: center;
+      /* ★ここを追加・変更：縦方向の余計な高さを潰す */
+      line-height: 1;         /* 文字上下の不要な行間スペースを消す */
+      min-height: 0;          /* Flex要素が縦に伸びるのを防ぐ */
+      height: 100%;           /* 割り当てられた1/3の高さの中に収める */
     }
 
     .note-num.highlight-digit {
