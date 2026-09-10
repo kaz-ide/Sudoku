@@ -445,6 +445,10 @@
       color: var(--text-note);
       opacity: 0.9;
       transition: color 0.15s ease, transform 0.15s ease;
+      
+      /* ★以下を追加：縦を80〜85%に圧縮して横のはみ出しを防ぐ */
+      transform: scaleY(0.85);
+      transform-origin: center;
     }
 
     .note-num.highlight-digit {
