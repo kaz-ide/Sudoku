@@ -440,7 +440,7 @@
       align-items: center;
       justify-content: center;
       font-family: 'Outfit', sans-serif;
-      font-size: 0.85rem;
+      font-size: 0.68rem;
       font-weight: 600;
       color: var(--text-note);
       opacity: 0.9;
@@ -725,7 +725,7 @@
         font-size: 1.3rem;
       }
       .note-num {
-        font-size: 0.7rem;
+        font-size: 0.55rem;
       }
       .num-btn {
         font-size: 1.2rem;
@@ -1380,12 +1380,6 @@
 
         if (this.initialBoard[r][c] !== 0) return;
 
-        // Block overwriting a correctly placed user digit
-        if (this.userBoard[r][c] !== 0 && this.userBoard[r][c] === this.solution[r][c]) {
-          this.sounds.playBlocked();
-          return;
-        }
-
         this.hasMadeMoves = true;
 
         if (this.isNoteMode) {
@@ -1474,12 +1468,6 @@
         const c = this.selectedCol;
 
         if (this.initialBoard[r][c] !== 0) return;
-
-        // Block erasing a correctly placed user digit
-        if (this.userBoard[r][c] !== 0 && this.userBoard[r][c] === this.solution[r][c]) {
-          this.sounds.playBlocked();
-          return;
-        }
 
         if (this.userBoard[r][c] !== 0 || this.notes[r][c].size > 0) {
           this.hasMadeMoves = true;
