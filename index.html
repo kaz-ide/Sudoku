@@ -1081,9 +1081,9 @@
       }
 
       static generate(difficulty) {
-        let targetClues = 38;
-        if (difficulty === 'hard') targetClues = 29;
-        if (difficulty === 'expert') targetClues = 22;
+        let targetClues = 36;
+        if (difficulty === 'hard') targetClues = 27;
+        if (difficulty === 'expert') targetClues = 21;
 
         const solution = this.createGrid();
         this.solve(solution);
